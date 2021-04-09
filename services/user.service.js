@@ -35,8 +35,13 @@ class UserService {
         }
     }
 
-    async updateUser() {
-
+    async updateUser(req, res) {
+        try {
+            const newUser = User.findOneAndUpdate({ _id: "" }, req.body, { new: true })
+            res.send(newUser)
+        } catch (error) {
+            res.status(500).json(error)
+        }
     }
 
     async deleteUser() {

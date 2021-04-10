@@ -1,4 +1,4 @@
-import Listing from '../models/listing.model'
+import Listing from '../models/listing.model.js'
 
 class ListingService {
     async createListing(req, res) {
@@ -11,7 +11,7 @@ class ListingService {
         }
     }
 
-    async getListing(req, res) {
+    async getListings(req, res) {
         try {
             const listing = await Listing.find()
             res.json(listing)

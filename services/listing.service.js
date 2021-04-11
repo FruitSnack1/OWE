@@ -3,7 +3,10 @@ import Listing from '../models/listing.model.js'
 class ListingService {
     async createListing(req, res) {
         try {
-            const listing = new Listing(req.body)
+            const json = JSON.parse(req.body.listing)
+            json.img = req.file.filename
+            json.user = req.user.id
+            const listing = new Listing(json)
             const newListing = await listing.save()
             res.json(newListing)
         } catch (error) {
@@ -13,7 +16,25 @@ class ListingService {
 
     async getListings(req, res) {
         try {
-            const listing = await Listing.find()
+            const listings = await Listing.find()
+            res.json(listings)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    async getOwnedListings(req, res) {
+        try {
+            const listings = await Listing.find({ user: req.user.id })
+            res.json(listings)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    }
+
+    async getListing(req, res) {
+        try {
+            const listing = await Listing.findOne({ _id: req.params.id }).populate('user')
             res.json(listing)
         } catch (error) {
             res.status(500).json(error)

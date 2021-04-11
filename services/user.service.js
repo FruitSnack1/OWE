@@ -27,7 +27,6 @@ class UserService {
                 res.status(403).json({ message: 'wrong password' })
 
             const accesstoken = generateToken({ id: user._id, username: user.username });
-            console.log(accesstoken)
             res.status(200).json({ message: 'logged in', accesstoken })
 
         } catch (error) {
@@ -37,7 +36,7 @@ class UserService {
 
     async updateUser(req, res) {
         try {
-            const newUser = User.findOneAndUpdate({ _id: "" }, req.body, { new: true })
+            const newUser = await User.findOneAndUpdate({ _id: req.user.id }, req.body, { new: true })
             res.send(newUser)
         } catch (error) {
             res.status(500).json(error)

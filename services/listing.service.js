@@ -3,10 +3,7 @@ import Listing from '../models/listing.model.js'
 class ListingService {
     async createListing(req, res) {
         try {
-            const json = JSON.parse(req.body.listing)
-            json.img = req.file.filename
-            json.user = req.user.id
-            const listing = new Listing(json)
+            const listing = new Listing({ user: req.user.id, ...req.body })
             const newListing = await listing.save()
             res.json(newListing)
         } catch (error) {
@@ -17,15 +14,6 @@ class ListingService {
     async getListings(req, res) {
         try {
             const listings = await Listing.find()
-            res.json(listings)
-        } catch (error) {
-            res.status(500).json(error)
-        }
-    }
-
-    async getOwnedListings(req, res) {
-        try {
-            const listings = await Listing.find({ user: req.user.id })
             res.json(listings)
         } catch (error) {
             res.status(500).json(error)
@@ -43,7 +31,10 @@ class ListingService {
 
     async updateListing(req, res) {
         try {
-            const newListing = await Listing.findOneAndUpdate({ _id: '' }, req.body, { new: true })
+            const listing = await Listing.findOne({ _id: req.params.id })
+            if (listing.user != req.user.id)
+                return res.status(403).json({ message: 'Unauthorized' })
+            const newListing = await Listing.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
             res.json(newListing)
         } catch (error) {
             res.status(500).json(error)
@@ -51,12 +42,23 @@ class ListingService {
     }
 
     async deleteListing(req, res) {
+        const { id } = req.params
         try {
-            const deletedListing = await Listing.deleteOne({ _id: '' })
+            const listing = await Listing.findOne({ _id: id })
+            if (listing.user != req.user.id)
+                return res.status(403)
+            const deletedListing = await Listing.deleteOne({ _id: id })
             res.json(deletedListing)
         } catch (error) {
             res.status(500).json(error)
         }
+    }
+
+    async uploadImage(req, res) {
+        if (req.file.filename)
+            res.json({ image: req.file.filename })
+        else
+            res.json({})
     }
 
 }

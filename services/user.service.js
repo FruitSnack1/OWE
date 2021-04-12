@@ -27,7 +27,12 @@ class UserService {
                 res.status(403).json({ message: 'wrong password' })
 
             const accesstoken = generateToken({ id: user._id, username: user.username });
-            res.status(200).json({ message: 'logged in', accesstoken })
+            res.status(200).json({
+                message: 'logged in',
+                accesstoken,
+                username: user.username,
+                id: user._id
+            })
 
         } catch (error) {
             res.status(500).json(error)

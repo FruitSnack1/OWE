@@ -23,8 +23,10 @@ router.get('/users', verifyToken, userService.getUser)
 router.put('/users', verifyToken, userService.updateUser)
 
 router.get('/listings', listingService.getListings)
-router.get('/listings/owned', verifyToken, listingService.getOwnedListings)
 router.get('/listings/:id', listingService.getListing)
-router.post('/listings', verifyToken, upload.single('img'), listingService.createListing)
+router.post('/listings', verifyToken, listingService.createListing)
+router.delete('/listings/:id', verifyToken, listingService.deleteListing)
+router.post('/listings/image', verifyToken, upload.single('img'), listingService.uploadImage)
+router.put('/listings/:id', verifyToken, listingService.updateListing)
 
 export default router

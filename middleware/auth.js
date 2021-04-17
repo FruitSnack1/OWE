@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken'
 
+//ověření tokenu a získání identity
 function verifyToken(req, res, next) {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization
     if (token == null) return res.sendStatus(401)
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
@@ -11,6 +12,7 @@ function verifyToken(req, res, next) {
     })
 }
 
+//generování tokenu
 function generateToken(data) {
     return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET)
 }

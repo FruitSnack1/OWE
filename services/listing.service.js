@@ -2,6 +2,7 @@ import Listing from '../models/listing.model.js'
 import fs from 'fs'
 
 class ListingService {
+    //vytvoření inzerátu
     async createListing(req, res) {
         try {
             const listing = new Listing({ user: req.user.id, ...req.body })
@@ -12,6 +13,7 @@ class ListingService {
         }
     }
 
+    //získání všech inzerátů
     async getListings(req, res) {
         try {
             const listings = await Listing.find()
@@ -21,6 +23,7 @@ class ListingService {
         }
     }
 
+    //získání konkrétního inzerátu + uživatele
     async getListing(req, res) {
         try {
             const listing = await Listing.findOne({ _id: req.params.id }).populate('user')
@@ -30,6 +33,7 @@ class ListingService {
         }
     }
 
+    //úprava inzerátu
     async updateListing(req, res) {
         try {
             const listing = await Listing.findOne({ _id: req.params.id })
@@ -42,6 +46,7 @@ class ListingService {
         }
     }
 
+    //odstranění inzerátu
     async deleteListing(req, res) {
         try {
             const { id } = req.params
@@ -49,6 +54,7 @@ class ListingService {
             if (listing.user != req.user.id)
                 return res.status(403).json({ message: 'Unauthorized' })
 
+            //odstranení obrázku
             if (listing.img)
                 fs.unlinkSync(`upload/${listing.img}`)
 
@@ -59,6 +65,7 @@ class ListingService {
         }
     }
 
+    //nahrání obrázku
     async uploadImage(req, res) {
         try {
             if (req.file.filename)

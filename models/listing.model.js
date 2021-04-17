@@ -1,13 +1,17 @@
 import mongoose from 'mongoose'
 
 const listingSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    img: String,
-    price: Number,
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    img: { type: String, required: true },
+    price: { type: Number, required: true },
     user: {
         type: mongoose.ObjectId,
         ref: 'User'
+    },
+    created: {
+        type: Date,
+        default: Date.now()
     }
 })
 

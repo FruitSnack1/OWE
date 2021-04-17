@@ -1,4 +1,5 @@
 import Listing from '../models/listing.model.js'
+import fs from 'fs'
 
 class ListingService {
     async createListing(req, res) {
@@ -42,11 +43,15 @@ class ListingService {
     }
 
     async deleteListing(req, res) {
-        const { id } = req.params
         try {
+            const { id } = req.params
             const listing = await Listing.findOne({ _id: id })
             if (listing.user != req.user.id)
-                return res.status(403)
+                return res.status(403).json({ message: 'Unauthorized' })
+
+            if (listing.img)
+                fs.unlinkSync(`upload/${listing.img}`)
+
             const deletedListing = await Listing.deleteOne({ _id: id })
             res.json(deletedListing)
         } catch (error) {
@@ -55,10 +60,12 @@ class ListingService {
     }
 
     async uploadImage(req, res) {
-        if (req.file.filename)
-            res.json({ image: req.file.filename })
-        else
-            res.json({})
+        try {
+            if (req.file.filename)
+                res.json({ image: req.file.filename })
+        } catch (error) {
+            res.status(500).json(error)
+        }
     }
 
 }

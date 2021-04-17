@@ -33,7 +33,6 @@ class UserService {
                 username: user.username,
                 id: user._id
             })
-
         } catch (error) {
             res.status(500).json(error)
         }
@@ -46,10 +45,6 @@ class UserService {
         } catch (error) {
             res.status(500).json(error)
         }
-    }
-
-    async deleteUser() {
-
     }
 
     async getUser(req, res) {

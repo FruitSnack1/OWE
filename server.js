@@ -13,7 +13,7 @@ app.use(express.static('upload'))
 
 app.use('/', router)
 
-mongoose.connect('mongodb://localhost/inzeraty', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://inzeraty:inzeraty@cluster0.orwb0.mongodb.net/owe?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 db.on('open', () => { console.log('Connected to database...') })

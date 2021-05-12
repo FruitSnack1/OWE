@@ -18,4 +18,4 @@ const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 db.on('open', () => { console.log('Connected to database...') })
 
-app.listen(3001)
+app.listen(80)

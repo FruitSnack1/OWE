@@ -2,6 +2,7 @@ import express from 'express'
 import multer from 'multer'
 import userService from '../services/user.service.js'
 import listingService from '../services/listing.service.js'
+import codesService from '../services/codes.service.js'
 import { verifyToken } from '../middleware/auth.js'
 
 //konfigurace multeru
@@ -30,5 +31,7 @@ router.post('/listings', verifyToken, listingService.createListing)
 router.post('/listings/image', verifyToken, upload.single('img'), listingService.uploadImage)
 router.put('/listings/:id', verifyToken, listingService.updateListing)
 router.delete('/listings/:id', verifyToken, listingService.deleteListing)
+
+router.get('/codes/categories', codesService.getCategories)
 
 export default router
